@@ -1,17 +1,24 @@
+import re
+
 from opportunity_scout.collector import fetch_page
 from opportunity_scout.models import OpportunitySignal
 from opportunity_scout.scoring import rank_opportunities
 from opportunity_scout.scraper import extract_opportunity_links
 
 
-DEMAND_PHRASES = (
+HIGH_INTENT_PHRASES = (
     "can't find",
     "cannot find",
     "discontinued",
     "replacement",
     "missing part",
+)
+
+FAILURE_PHRASES = (
     "broken",
     "broke",
+    "cracked",
+    "snapped",
 )
 
 PRINTABLE_PART_WORDS = (
@@ -28,16 +35,30 @@ PRINTABLE_PART_WORDS = (
     "adapter",
 )
 
-COMPLEX_PART_WORDS = (
+COMPLEX_CONTEXT_WORDS = (
     "battery",
     "screen",
     "display",
     "circuit",
+    "board",
+    "motherboard",
+    "capacitor",
+    "flex cable",
+    "hard drive",
     "motor",
     "sensor",
     "camera",
     "antenna",
+    "laptop",
+    "smartphone",
 )
+
+
+def contains_term(text: str, terms: tuple[str, ...]) -> bool:
+    return any(
+        re.search(rf"\b{re.escape(term)}\b", text)
+        for term in terms
+    )
 
 
 def add_initial_estimates(
@@ -46,15 +67,16 @@ def add_initial_estimates(
     title = signal.title.lower()
     demand = 5
 
-    for phrase in DEMAND_PHRASES:
-        if phrase in title:
-            demand += 1
+    if contains_term(title, HIGH_INTENT_PHRASES):
+        demand += 2
+    elif contains_term(title, FAILURE_PHRASES):
+        demand += 1
 
     printability = 5
-    if any(word in title for word in PRINTABLE_PART_WORDS):
-        printability = 9
-    elif any(word in title for word in COMPLEX_PART_WORDS):
+    if contains_term(title, COMPLEX_CONTEXT_WORDS):
         printability = 3
+    elif contains_term(title, PRINTABLE_PART_WORDS):
+        printability = 9
 
     return signal.model_copy(
         update={
