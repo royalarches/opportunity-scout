@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opportunity-scout"
+version = "0.1.0"
+description = "Find and rank niche 3D-printable replacement-part opportunities."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.15,<5",
+    "httpx>=0.28,<1",
+    "pydantic>=2.13,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9,<10",
+]
+
+[project.scripts]
+opportunity-scout = "opportunity_scout.__main__:main"
+opportunity-scout-ifixit = "opportunity_scout.run_ifixit:main"
+opportunity-scout-batch = "opportunity_scout.batch:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
