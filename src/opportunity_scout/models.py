@@ -12,5 +12,6 @@ class OpportunitySignal(BaseModel):
     demand_score: float = 0
     competition_score: float = 0
     printability_score: float = 0
-    legal_risk_score: float = 0
+    legal_risk_score: float=0
+    safety_risk_score: float=0
     total_score: float = 0

@@ -26,3 +26,12 @@ def test_complex_context_overrides_printable_part_word():
     )
 
     assert signal.printability_score == 3
+
+
+def test_safety_critical_parts_are_penalized():
+    signal = add_initial_estimates(
+        make_signal("Broken bottom bracket", "bottom-bracket")
+    )
+
+    assert signal.printability_score == 1
+    assert signal.safety_risk_score == 9

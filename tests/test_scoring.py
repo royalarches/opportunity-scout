@@ -11,6 +11,7 @@ def test_calculate_total():
         competition_score=3,
         printability_score=9,
         legal_risk_score=2,
+        safety_risk_score=2,
     )
 
     assert calculate_total(signal) == 8.1

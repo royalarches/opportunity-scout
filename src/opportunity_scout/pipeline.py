@@ -53,6 +53,33 @@ COMPLEX_CONTEXT_WORDS = (
     "smartphone",
 )
 
+SAFETY_CRITICAL_TERMS = (
+    "bottom bracket",
+    "brake",
+    "steering",
+    "handlebar",
+    "crank",
+    "pedal",
+    "wheel",
+    "axle",
+    "suspension",
+    "frame",
+    "seatpost",
+    "propane",
+    "gas line",
+    "high voltage",
+    "smoke detector",
+    "climbing",
+    "medical",
+    "brakes",
+    "pedaling",
+    "frames",
+    "spokes",
+    "rim",
+    "derailleur",
+)
+
+
 
 def contains_term(text: str, terms: tuple[str, ...]) -> bool:
     return any(
@@ -77,6 +104,10 @@ def add_initial_estimates(
         printability = 3
     elif contains_term(title, PRINTABLE_PART_WORDS):
         printability = 9
+    safety_risk = 2
+    if contains_term(title, SAFETY_CRITICAL_TERMS):
+        safety_risk = 9
+        printability = min(printability, 1)
 
     return signal.model_copy(
         update={
@@ -84,6 +115,7 @@ def add_initial_estimates(
             "competition_score": 5,
             "printability_score": printability,
             "legal_risk_score": 3,
+            "safety_risk_score": safety_risk,
         }
     )
 
