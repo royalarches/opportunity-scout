@@ -5,12 +5,22 @@ import httpx
 
 from opportunity_scout.collector import USER_AGENT
 from opportunity_scout.models import OpportunitySignal
-from opportunity_scout.pipeline import add_initial_estimates
+from opportunity_scout.pipeline import (
+    FAILURE_PHRASES,
+    HIGH_INTENT_PHRASES,
+    PRINTABLE_PART_WORDS,
+    add_initial_estimates,
+    contains_term,
+)
 from opportunity_scout.scoring import rank_opportunities
 
 
 API_URL = "https://api.stackexchange.com/2.3/search/advanced"
-
+OPPORTUNITY_TERMS = (
+    HIGH_INTENT_PHRASES
+    + FAILURE_PHRASES
+    + PRINTABLE_PART_WORDS
+)
 
 def search_stackexchange(
     query: str,
@@ -35,6 +45,8 @@ def search_stackexchange(
 
     for item in response.json().get("items", []):
         title = html.unescape(item["title"])
+        if not contains_term(title.lower(), OPPORTUNITY_TERMS):
+            continue
         signal = OpportunitySignal(
             source=f"stackexchange:{site}",
             title=title,
