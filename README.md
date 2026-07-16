@@ -51,3 +51,33 @@ Do not bypass authentication, access controls, or site restrictions.
 The current scores are preliminary filters, not proof of market demand.
 Promising results still require marketplace research, legal review,
 measurements, prototyping, and customer validation.
+
+## Additional sources
+
+Opportunity Scout also searches the official Stack Exchange API across
+selected enthusiast communities. A combined scout is available with:
+
+```bash
+opportunity-scout-all
+```
+
+Marketplace competition checks use official eBay and Etsy APIs:
+
+```bash
+opportunity-scout-marketplace ebay "replacement knob"
+opportunity-scout-marketplace etsy "replacement knob"
+```
+
+These marketplace checks examine public active listings, titles, URLs,
+prices, and aggregate result counts. They do not access private orders,
+sales records, customer data, messages, or shop-management functions.
+
+## Credentials and privacy
+
+API credentials are loaded from a local `.env` file that is excluded
+from Git. Real credentials and generated data are never committed.
+The `.env.example` file documents the required variable names without
+containing any secrets.
+
+Reddit access is intentionally disabled unless explicit API and
+commercial-use permission is obtained from Reddit.
