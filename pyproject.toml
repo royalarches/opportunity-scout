@@ -27,6 +27,7 @@ opportunity-scout-batch = "opportunity_scout.batch:main"
 opportunity-scout-stackexchange = "opportunity_scout.run_stackexchange:main"
 opportunity-scout-all = "opportunity_scout.multisource:main"
 opportunity-scout-marketplace = "opportunity_scout.run_marketplace:main"
+opportunity-scout-feed = "opportunity_scout.run_feed:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
