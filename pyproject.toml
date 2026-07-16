@@ -23,6 +23,7 @@ dev = [
 opportunity-scout = "opportunity_scout.__main__:main"
 opportunity-scout-ifixit = "opportunity_scout.run_ifixit:main"
 opportunity-scout-batch = "opportunity_scout.batch:main"
+opportunity-scout-stackexchange = "opportunity_scout.run_stackexchange:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
