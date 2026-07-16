@@ -4,16 +4,10 @@ from pathlib import Path
 
 from opportunity_scout.batch import run_batch
 from opportunity_scout.models import OpportunitySignal
+from opportunity_scout.reporting import write_csv_report
 from opportunity_scout.scoring import rank_opportunities
+from opportunity_scout.searches import COMMUNITY_TARGETED_SEARCHES
 from opportunity_scout.stackexchange import search_stackexchange
-
-
-COMMUNITY_SEARCHES = (
-    ("bicycles", "replacement reflector bracket"),
-    ("diy", "discontinued appliance knob"),
-    ("mechanics", "broken interior trim clip"),
-    ("outdoors", "replacement tent pole clip"),
-)
 
 
 def run_multisource() -> list[OpportunitySignal]:
@@ -21,7 +15,7 @@ def run_multisource() -> list[OpportunitySignal]:
         str(signal.url): signal for signal in run_batch()
     }
 
-    for site, query in COMMUNITY_SEARCHES:
+    for site, query in COMMUNITY_TARGETED_SEARCHES:
         print(f"Searching Stack Exchange {site}: {query}")
         for signal in search_stackexchange(query, site):
             unique[str(signal.url)] = signal
@@ -40,8 +34,13 @@ def main() -> None:
             indent=2,
         )
     )
+    csv_path = write_csv_report(
+        results,
+        "data/multisource_opportunities.csv",
+    )
 
     print(f"Saved {len(results)} unique results to {output_path}.")
+    print(f"Saved spreadsheet report to {csv_path}.")
     print("Top opportunities:")
 
     for item in results[:25]:

@@ -5,16 +5,10 @@ from pathlib import Path
 from opportunity_scout.ifixit import search_ifixit
 from opportunity_scout.models import OpportunitySignal
 from opportunity_scout.scoring import rank_opportunities
+from opportunity_scout.searches import IFIXIT_TARGETED_QUERIES
 
 
-SEARCH_QUERIES = (
-    "broken knob",
-    "broken clip",
-    "broken hinge",
-    "replacement bracket",
-    "discontinued handle",
-    "missing cap",
-)
+SEARCH_QUERIES = IFIXIT_TARGETED_QUERIES
 
 
 def run_batch() -> list[OpportunitySignal]:
